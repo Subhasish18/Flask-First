@@ -1,19 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Flask App</title>
+    <title>Form</title>
 </head>
 <body>
-    <h1>{{ message }}</h1>
+    <h1>Sign Up Form</h1>
+    <form method="POST">
+        <label>Email:</label><br>
+        <input type="email" name="email" required><br><br>
 
-    <form action="/" method="POST">
-        <label for="fname">First name:</label><br>
-        <input type="text" id="fname" name="fname"><br>
-        <label for="lname">Last name:</label><br>
-        <input type="text" id="lname" name="lname"><br><br>
+        <label>Password:</label><br>
+        <input type="password" name="password" required><br><br>
+
+        <input type="checkbox" name="terms">
+        <label>I accept the terms and conditions</label><br><br>
+
         <input type="submit" value="Submit">
-    </form> 
-
+    </form>
 </body>
 </html>
