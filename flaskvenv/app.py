@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request,jsonify
 import sqlite3
 import os
 
@@ -43,6 +43,8 @@ def index():
             <p>Terms: {terms}</p>
         """
 
+
+
     return render_template('home.html')
 
 @app.route('/users')
@@ -54,6 +56,32 @@ def users():
     conn.close()
     # Return as simple HTML
     return '<br>'.join(str(user) for user in users)
+
+#API
+@app.route('/api/users', methods=['POST'])
+def api_add_user():
+    data = request.get_json()
+
+    if not data:
+        return jsonify({'error': 'Missing JSON body'}), 400
+
+    email = data.get('email')
+    password = data.get('password')
+    terms = data.get('terms')
+
+    if not all([email, password, terms]):
+        return jsonify({'error': 'Missing required fields'}), 400
+
+    try:
+        with sqlite3.connect(DATABASE) as conn:
+            c = conn.cursor()
+            c.execute("INSERT INTO users (email, password, terms) VALUES (?, ?, ?)",
+                      (email, password, terms))
+            conn.commit()
+
+        return jsonify({'message': 'User added successfully'}), 201
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 # Initialize database before first request
 @app.before_request
